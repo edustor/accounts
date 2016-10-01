@@ -19,5 +19,18 @@ class TokenController {
                                 "error_description" to "grant_type was not provided"
                         )
                 )
+
+        when(grantType) {
+            "password" -> processPasswordGrant(payload)
+        }
+    }
+
+    fun processPasswordGrant(payload: Map<String, String>) {
+        val username = payload.get("username") ?: throw HttpRequestProcessingException(HttpStatus.BAD_REQUEST,
+                mapOf(
+                        "error" to "invalid_request",
+                        "error_description" to "username was not provided"
+                )
+        )
     }
 }
