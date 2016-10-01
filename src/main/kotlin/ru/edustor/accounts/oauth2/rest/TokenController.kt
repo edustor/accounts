@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import ru.edustor.accounts.oauth2.providers.GoogleProvider
+import ru.edustor.accounts.oauth2.providers.google.GoogleProvider
 import ru.edustor.commons.exceptions.oauth2.InvalidGrantException
 import ru.edustor.commons.exceptions.oauth2.MissingArgumentException
 
