@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import ru.edustor.accounts.model.Account
+import ru.edustor.accounts.model.RefreshToken
 import ru.edustor.accounts.oauth2.providers.google.GoogleProvider
+import ru.edustor.accounts.repository.RefreshTokenRepository
 import ru.edustor.commons.exceptions.HttpRequestProcessingException
 import ru.edustor.commons.exceptions.oauth2.InvalidGrantException
 import ru.edustor.commons.exceptions.oauth2.MissingArgumentException
@@ -21,7 +23,7 @@ import java.util.*
 
 @RestController
 @RequestMapping(value = "/oauth2/token", method = arrayOf(RequestMethod.POST))
-class TokenController(val googleProvider: GoogleProvider) {
+class TokenController(val googleProvider: GoogleProvider, val refreshTokenRepository: RefreshTokenRepository) {
 
 
     val TOKEN_EXPIRE_IN = 60 * 60 // Seconds
@@ -39,6 +41,7 @@ class TokenController(val googleProvider: GoogleProvider) {
         val grantType = payload["grant_type"] ?: throw MissingArgumentException("grant_type")
         val scope = payload["scope"] ?: ""
 
+        val scopeList = scope.split(" ")
 
         val account = when (grantType) {
             "password" -> processPasswordGrant(payload)
@@ -47,11 +50,19 @@ class TokenController(val googleProvider: GoogleProvider) {
 
         val token = makeToken(account, scope)
 
-        return mapOf(
+        val resp = mutableMapOf(
                 "token" to token,
                 "expires_in" to TOKEN_EXPIRE_IN,
                 "scope" to scope
         )
+
+        if ("offline" in scopeList) {
+            val rt = RefreshToken(account)
+            refreshTokenRepository.save(rt)
+            resp["refresh_token"] = rt.token
+        }
+
+        return resp
     }
 
     fun processPasswordGrant(payload: Map<String, String>): Account {
