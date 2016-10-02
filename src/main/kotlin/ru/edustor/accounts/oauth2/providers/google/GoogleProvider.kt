@@ -5,10 +5,12 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import org.springframework.stereotype.Component
+import ru.edustor.accounts.model.Account
+import ru.edustor.accounts.repository.AccountRepository
 import ru.edustor.commons.exceptions.oauth2.InvalidGrantException
 
 @Component
-open class GoogleProvider {
+open class GoogleProvider(val accountRepository: AccountRepository) {
 
     private val AUDIENCE = "99685742253-41uieqd0vl3e03l62c7t3impd38gdt4q.apps.googleusercontent.com"
 
@@ -44,5 +46,19 @@ open class GoogleProvider {
         )
 
         return googleAccount
+    }
+
+    fun authenticateWithGoogle(idToken: String): Account {
+        val googleAccount = processIdToken(idToken)
+
+        val account = accountRepository.findByGoogleSub(googleAccount.sub) ?: let {
+            val account = Account()
+            account.googleSub = googleAccount.sub
+            account.email = googleAccount.email
+            accountRepository.save(account)
+            account
+        }
+
+        return account
     }
 }
