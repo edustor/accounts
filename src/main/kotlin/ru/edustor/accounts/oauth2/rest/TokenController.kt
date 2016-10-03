@@ -45,6 +45,7 @@ class TokenController(val googleProvider: GoogleProvider, val refreshTokenReposi
 
         val account = when (grantType) {
             "password" -> processPasswordGrant(payload)
+            "refresh_token" -> processRefreshTokenGrant(payload)
             else -> throw OAuthException("unsupported_grant_type", "$grantType is not recognized")
         }
 
@@ -75,6 +76,12 @@ class TokenController(val googleProvider: GoogleProvider, val refreshTokenReposi
         }
 
         return account
+    }
+
+    fun processRefreshTokenGrant(payload: Map<String, String>): Account {
+        val tokenStr = payload["refresh_token"] ?: throw MissingArgumentException("refresh_token")
+        val token = refreshTokenRepository.findByToken(tokenStr) ?: throw InvalidGrantException("Invalid or expired refresh token")
+        return token.account
     }
 
     fun makeToken(account: Account, scope: String): String {
