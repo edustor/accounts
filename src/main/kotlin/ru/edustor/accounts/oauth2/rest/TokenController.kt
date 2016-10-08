@@ -25,8 +25,6 @@ import java.util.*
 @RestController
 @RequestMapping(value = "/oauth2/token", method = arrayOf(RequestMethod.POST))
 class TokenController(val googleProvider: GoogleProvider, val refreshTokenRepository: RefreshTokenRepository) {
-
-
     val TOKEN_EXPIRE_IN = 60 * 60 // Seconds
 
     val signkey: PrivateKey

@@ -6,3 +6,5 @@ spring:
     hibernate:
       ddl-auto: update
     generate-ddl: true
+server:
+  port: 8081
