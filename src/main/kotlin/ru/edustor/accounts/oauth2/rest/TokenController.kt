@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 import ru.edustor.accounts.model.Account
 import ru.edustor.accounts.model.RefreshToken
 import ru.edustor.accounts.oauth2.providers.google.GoogleProvider
+import ru.edustor.accounts.repository.AccountRepository
 import ru.edustor.accounts.repository.RefreshTokenRepository
 import ru.edustor.commons.exceptions.HttpRequestProcessingException
 import ru.edustor.commons.exceptions.oauth2.InvalidGrantException

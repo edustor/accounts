@@ -1,5 +1,8 @@
 spring:
-  data:
-    mongodb:
-      host: mongo
-      database: edustor-accounts
+  datasource:
+    url: jdbc:postgresql://localhost:5432/edustor_accounts
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true

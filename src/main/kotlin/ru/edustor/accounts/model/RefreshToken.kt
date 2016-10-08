@@ -1,15 +1,24 @@
 package ru.edustor.accounts.model
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.DBRef
-import org.springframework.data.mongodb.core.mapping.Document
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import ru.edustor.accounts.util.genRandomToken
+import java.util.*
+import javax.persistence.CascadeType
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.OneToOne
 
-@Document
+@Entity
 class RefreshToken() {
-    @Id lateinit var token: String
-    @DBRef @Indexed lateinit var account: Account
+
+    @Id
+    var id: String = UUID.randomUUID().toString()
+
+    lateinit var token: String
+    @OneToOne(cascade = arrayOf(CascadeType.REMOVE))
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    lateinit var account: Account
 
     constructor(account: Account) : this() {
         this.account = account

@@ -1,13 +1,14 @@
 package ru.edustor.accounts.model
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
+import javax.persistence.Entity
+import javax.persistence.Id
 
-@Document
+@Entity
 class Account {
-    @Id var id: String = UUID.randomUUID().toString()
+    @Id
+    var id: String = UUID.randomUUID().toString()
+
     var email: String? = null
-    @Indexed var googleSub: String? = null
+    var googleSub: String? = null
 }
