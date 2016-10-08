@@ -1,4 +1,4 @@
-package ru.edustor.commons.exceptions.handler
+package ru.edustor.accounts.exceptions.handler
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.context.request.ServletRequestAttributes
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver
-import ru.edustor.commons.exceptions.HttpRequestProcessingException
+import ru.edustor.accounts.exceptions.HttpRequestProcessingException
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse

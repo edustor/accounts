@@ -1,4 +1,4 @@
-package ru.edustor.commons.exceptions.handler
+package ru.edustor.accounts.exceptions.handler
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.web.ErrorAttributes

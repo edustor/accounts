@@ -7,7 +7,7 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import org.springframework.stereotype.Component
 import ru.edustor.accounts.model.Account
 import ru.edustor.accounts.repository.AccountRepository
-import ru.edustor.commons.exceptions.oauth2.InvalidGrantException
+import ru.edustor.accounts.exceptions.oauth2.InvalidGrantException
 
 @Component
 open class GoogleProvider(val accountRepository: AccountRepository) {

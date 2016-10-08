@@ -1,4 +1,4 @@
-package ru.edustor.commons.exceptions
+package ru.edustor.accounts.exceptions
 
 import org.springframework.http.HttpStatus
 

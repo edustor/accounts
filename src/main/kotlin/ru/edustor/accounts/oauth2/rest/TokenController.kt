@@ -13,10 +13,10 @@ import ru.edustor.accounts.model.RefreshToken
 import ru.edustor.accounts.oauth2.providers.google.GoogleProvider
 import ru.edustor.accounts.repository.AccountRepository
 import ru.edustor.accounts.repository.RefreshTokenRepository
-import ru.edustor.commons.exceptions.HttpRequestProcessingException
-import ru.edustor.commons.exceptions.oauth2.InvalidGrantException
-import ru.edustor.commons.exceptions.oauth2.MissingArgumentException
-import ru.edustor.commons.exceptions.oauth2.OAuthException
+import ru.edustor.accounts.exceptions.HttpRequestProcessingException
+import ru.edustor.accounts.exceptions.oauth2.InvalidGrantException
+import ru.edustor.accounts.exceptions.oauth2.MissingArgumentException
+import ru.edustor.accounts.exceptions.oauth2.OAuthException
 import java.io.File
 import java.security.KeyFactory
 import java.security.PrivateKey
