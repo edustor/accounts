@@ -29,7 +29,7 @@ import java.util.*
 class TokenController(val googleProvider: GoogleProvider, val refreshTokenRepository: RefreshTokenRepository) {
     val logger = LoggerFactory.getLogger(TokenController::class.java)
 
-    val TOKEN_EXPIRE_IN = 1 * 60 // Seconds
+    val TOKEN_EXPIRE_IN = 10 * 60 // Seconds
 
     val signkey: PrivateKey
 
