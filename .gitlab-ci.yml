@@ -1,0 +1,36 @@
+stages:
+  - test
+  - upload
+  - deploy
+
+test_build:
+  image: docker:git
+  stage: test
+  services:
+    - docker:dind
+  script:
+    - docker build -t registry.gitlab.com/edustor/accounts .
+  except:
+    - master
+
+build_homeserver_image:
+  image: docker:git
+  stage: upload
+  environment: cloud
+  services:
+    - docker:dind
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker build -t registry.gitlab.com/edustor/accounts .
+    - docker push registry.gitlab.com/edustor/accounts
+    - docker images
+    - docker history registry.gitlab.com/edustor/accounts
+  only:
+    - master
+
+deploy:
+  stage: deploy
+  script:
+    - curl -X POST -F token=$EDUSTOR_DEPLOY_TRIGGER_TOKEN -F ref=edustor https://gitlab.com/api/v3/projects/1237981/trigger/builds
+  only:
+    - master

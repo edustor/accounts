@@ -17,6 +17,10 @@ buildscript {
 apply plugin: 'kotlin'
 apply plugin: 'spring-boot'
 
+jar {
+    destinationDir = new File(buildDir, "/dist")
+    archiveName = "edustor-accounts.jar"
+}
 
 repositories {
     mavenCentral()
