@@ -5,7 +5,7 @@
 //}
 
 docker.image("wutiarn/rancher-deployer").inside {
-    withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'rancher_api',
+    withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: env.rancher_api,
                       usernameVariable: 'ACCESS_KEY', passwordVariable: 'SECRET_KEY']]) {
         env.RANCHER_ACCESS_KEY = ACCESS_KEY
         env.RANCHER_SECRET_KEY = SECRET_KEY
