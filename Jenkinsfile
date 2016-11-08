@@ -9,11 +9,17 @@ node {
 
     stage "Deploy"
     docker.image("wutiarn/rancher-deployer").inside {
-        withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: env.RANCHER_API_CREDENTIALS,
+        withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: "api.rancher.wutiarn.ru",
                           usernameVariable: 'ACCESS_KEY', passwordVariable: 'SECRET_KEY']]) {
             env.RANCHER_ACCESS_KEY = ACCESS_KEY
             env.RANCHER_SECRET_KEY = SECRET_KEY
         }
+
+        env.RANCHER_SERVICE_NAME = "edustor"
+        env.RANCHER_STACK_ID = "1st13"
+        env.RANCHER_STACK_NAME = "edustorAccounts"
+        env.RANCHER_URL = "http://hs.wutiarn.ru:8080/v1/projects/1a5"
+
         sh "/root/upgrade.sh"
     }
 }
