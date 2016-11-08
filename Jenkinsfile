@@ -5,12 +5,10 @@
 //}
 
 docker.image("wutiarn/rancher-deployer").inside {
-    withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'api.rancher.wutiarn.ru',
+    withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: 'rancher_api',
                       usernameVariable: 'ACCESS_KEY', passwordVariable: 'SECRET_KEY']]) {
         env.RANCHER_ACCESS_KEY = ACCESS_KEY
         env.RANCHER_SECRET_KEY = SECRET_KEY
-
-        sh "env"
     }
     sh "env"
 //    sh "/root/upgrade.sh"
