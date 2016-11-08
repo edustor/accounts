@@ -1,5 +1,4 @@
 docker.withRegistry("https://registry.wutiarn.ru", "registry.wutiarn.ru") {
-    image = docker.image("registry.wutiarn.ru/edustor/accounts")
-    docker.build(image)
-    image.push("latest")
+    image = docker.build("registry.wutiarn.ru/edustor/accounts")
+    image.push()
 }
