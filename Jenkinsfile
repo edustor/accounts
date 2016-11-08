@@ -15,9 +15,9 @@ node {
             env.RANCHER_SECRET_KEY = SECRET_KEY
         }
 
-        env.RANCHER_SERVICE_NAME = "edustor"
+        env.RANCHER_SERVICE_NAME = "edustorAccounts"
         env.RANCHER_STACK_ID = "1st13"
-        env.RANCHER_STACK_NAME = "edustorAccounts"
+        env.RANCHER_STACK_NAME = "edustor"
         env.RANCHER_URL = "http://hs.wutiarn.ru:8080/v1/projects/1a5"
 
         sh "/root/upgrade.sh"
