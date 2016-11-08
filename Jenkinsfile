@@ -1,6 +1,6 @@
 docker.withRegistry("https://registry.wutiarn.ru", "registry.wutiarn.ru") {
-    git credentialsId: 'BitBucket ssh', url: 'git@bitbucket.org:edustor/accounts.git'
+    checkout scm
     sh "ls -lah"
-    image = docker.build("registry.wutiarn.ru/edustor/accounts")
-    image.push()
+//    image = docker.build("registry.wutiarn.ru/edustor/accounts")
+//    image.push()
 }
