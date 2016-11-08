@@ -9,7 +9,8 @@ docker.image("wutiarn/rancher-deployer").inside {
                       usernameVariable: 'ACCESS_KEY', passwordVariable: 'SECRET_KEY']]) {
         env.RANCHER_ACCESS_KEY = ACCESS_KEY
         env.RANCHER_SECRET_KEY = SECRET_KEY
+
+        sh "/root/upgrade.sh"
+
     }
-    sh "env"
-//    sh "/root/upgrade.sh"
 }
