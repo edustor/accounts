@@ -1,7 +1,7 @@
 node {
     stage "Build"
     properties([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'StringParameterDefinition', name: 'myparam', defaultValue: 'default value']]]])
-    echo "received ${binding.hasVariable('myparam') ? myparam : 'undefined'}"
+    echo "received $env.myparam"
 //    docker.withRegistry("https://registry.wutiarn.ru", "registry.wutiarn.ru") {
 //        checkout scm
 //        image = docker.build("edustor/accounts")
