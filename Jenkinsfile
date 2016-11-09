@@ -26,6 +26,8 @@ node {
             env.RANCHER_SECRET_KEY = SECRET_KEY
         }
 
+        sh "env"
+
         sh "/root/upgrade.sh"
     }
 }
