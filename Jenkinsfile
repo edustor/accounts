@@ -10,24 +10,32 @@ node {
             string(defaultValue: 'https://rancher.wutiarn.ru/v1/projects/1a5', description: '', name: 'RANCHER_URL')
     ]), pipelineTriggers([])])
 
-    stage "Build"
-    docker.withRegistry(env.REGISTRY_URL, env.REGISTRY_CREDENTIALS) {
+    stage "Checkout" {
         checkout scm
-        image = docker.build("edustor/accounts")
-        stage "Push"
-        image.push()
     }
 
-    stage "Deploy"
-    docker.image("wutiarn/rancher-deployer").inside {
-        withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: env.RANCHER_API_CREDENTIALS,
-                          usernameVariable: 'ACCESS_KEY', passwordVariable: 'SECRET_KEY']]) {
-            env.RANCHER_ACCESS_KEY = ACCESS_KEY
-            env.RANCHER_SECRET_KEY = SECRET_KEY
+    stage "Build" {
+        image = docker.build("edustor/accounts")
+
+    }
+
+    if (env.BRANCH_NAME == "master") {
+        stage "Push" {
+            docker.withRegistry(env.REGISTRY_URL, env.REGISTRY_CREDENTIALS) {
+                image.push()
+            }
         }
 
-        sh "env"
+        stage "Deploy" {
+            docker.image("wutiarn/rancher-deployer").inside {
+                withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: env.RANCHER_API_CREDENTIALS,
+                                  usernameVariable: 'ACCESS_KEY', passwordVariable: 'SECRET_KEY']]) {
+                    env.RANCHER_ACCESS_KEY = ACCESS_KEY
+                    env.RANCHER_SECRET_KEY = SECRET_KEY
+                }
 
-        sh "/root/upgrade.sh"
+                sh "/root/upgrade.sh"
+            }
+        }
     }
 }
