@@ -10,23 +10,23 @@ node {
             string(defaultValue: 'https://rancher.wutiarn.ru/v1/projects/1a5', description: '', name: 'RANCHER_URL')
     ]), pipelineTriggers([])])
 
-    stage "Checkout" {
+    stage("Checkout") {
         checkout scm
     }
 
-    stage "Build" {
+    stage("Build") {
         image = docker.build("edustor/accounts")
 
     }
 
     if (env.BRANCH_NAME == "master") {
-        stage "Push" {
+        stage("Push"){
             docker.withRegistry(env.REGISTRY_URL, env.REGISTRY_CREDENTIALS) {
                 image.push()
             }
         }
 
-        stage "Deploy" {
+        stage("Deploy"){
             docker.image("wutiarn/rancher-deployer").inside {
                 withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: env.RANCHER_API_CREDENTIALS,
                                   usernameVariable: 'ACCESS_KEY', passwordVariable: 'SECRET_KEY']]) {
