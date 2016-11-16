@@ -1,0 +1,7 @@
+FROM java:8-jdk
+
+ADD . /code/src
+
+WORKDIR /code
+
+CMD bash
