@@ -5,6 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 @SpringBootApplication(scanBasePackages = arrayOf("ru.edustor"))
 open class EdustorAccountsApplication {
     companion object {
-        val VERSION: String = "0.5.0pre1"
+        val VERSION: String = "0.5.0"
     }
 }
