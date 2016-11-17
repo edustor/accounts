@@ -28,6 +28,7 @@ node {
         sh "./gradlew assemble"
         sh "mv build/dist/edustor-accounts.jar ."
         archiveArtifacts "edustor-accounts.jar"
+        fingerprint "edustor-accounts.jar"
     }
 
     if (env.BRANCH_NAME == "master") {
