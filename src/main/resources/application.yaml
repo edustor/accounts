@@ -1,10 +1,6 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://postgres.edustor.svc.cluster.local:5432/edustor_accounts
-    username: postgres
-  jpa:
-    hibernate:
-      ddl-auto: update
-    generate-ddl: true
 server:
   port: 8081
+spring:
+  data:
+    mongodb:
+      database: edustor-accounts
