@@ -7,8 +7,7 @@ import javax.persistence.Id
 
 @Document
 class Account {
-    @Id
-    var id: String = UUID.randomUUID().toString()
+    @Id var id: String = UUID.randomUUID().toString()
 
     var email: String? = null
     var googleSub: String? = null

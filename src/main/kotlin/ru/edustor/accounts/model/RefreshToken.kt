@@ -1,12 +1,13 @@
 package ru.edustor.accounts.model
 
+import org.springframework.data.mongodb.core.index.Indexed
 import ru.edustor.accounts.util.genRandomToken
 import java.time.Instant
 
 class RefreshToken() {
-    lateinit var token: String
+    @Indexed lateinit var token: String
     lateinit var scope: String
-    lateinit var lastUsed: Instant
+    @Indexed lateinit var lastUsed: Instant
 
     constructor(scope: String) : this() {
         this.token = genRandomToken()
