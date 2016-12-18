@@ -3,7 +3,6 @@ package ru.edustor.accounts.exceptions.handler
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import ru.edustor.accounts.exceptions.handler.HttpRequestProcessingExceptionController
 import ru.edustor.accounts.exceptions.HttpRequestProcessingException
 import java.util.*
 import javax.servlet.http.HttpServletRequest
