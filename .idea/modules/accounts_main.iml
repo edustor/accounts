@@ -58,8 +58,12 @@
                 <option name="extraHelp" value="false" />
                 <option name="noInline" value="false" />
                 <option name="repeat" />
-                <option name="pluginClasspaths" />
-                <option name="pluginOptions" />
+                <option name="pluginClasspaths">
+                  <array />
+                </option>
+                <option name="pluginOptions">
+                  <array />
+                </option>
                 <option name="freeArgs">
                   <list />
                 </option>
@@ -80,7 +84,7 @@
       </configuration>
     </facet>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../build/classes/main" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../src/main">
