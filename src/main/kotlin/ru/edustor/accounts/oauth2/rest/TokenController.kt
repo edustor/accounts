@@ -3,6 +3,7 @@ package ru.edustor.accounts.oauth2.rest
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -16,7 +17,6 @@ import ru.edustor.accounts.model.Account
 import ru.edustor.accounts.model.RefreshToken
 import ru.edustor.accounts.oauth2.providers.google.GoogleProvider
 import ru.edustor.accounts.repository.RefreshTokenRepository
-import java.io.File
 import java.security.KeyFactory
 import java.security.PrivateKey
 import java.security.spec.PKCS8EncodedKeySpec
@@ -25,14 +25,17 @@ import java.util.*
 
 @RestController
 @RequestMapping(value = "/oauth2/token", method = arrayOf(RequestMethod.POST))
-class TokenController(val googleProvider: GoogleProvider, val refreshTokenRepository: RefreshTokenRepository) {
+class TokenController(
+        @Value("\${edustor.accounts.jwk-key}") val jwkKeyBase64: String,
+        val googleProvider: GoogleProvider,
+        val refreshTokenRepository: RefreshTokenRepository) {
     val logger = LoggerFactory.getLogger(TokenController::class.java)
     val TOKEN_EXPIRE_IN = 10 * 60 // Seconds
     val signkey: PrivateKey
     val systemScopes = arrayOf("internal")
 
     init {
-        val keyBytes = File("keys/jwk.der").readBytes()
+        val keyBytes = Base64.getDecoder().decode(jwkKeyBase64)
         val spec = PKCS8EncodedKeySpec(keyBytes)
         signkey = KeyFactory.getInstance("RSA").generatePrivate(spec)
     }
