@@ -16,7 +16,7 @@ import ru.edustor.accounts.exceptions.oauth2.OAuthException
 import ru.edustor.accounts.model.Account
 import ru.edustor.accounts.model.RefreshToken
 import ru.edustor.accounts.oauth2.providers.google.GoogleProvider
-import ru.edustor.accounts.repository.AccountRepository
+import ru.edustor.accounts.repository.RefreshTokenRepository
 import java.security.KeyFactory
 import java.security.PrivateKey
 import java.security.spec.PKCS8EncodedKeySpec
@@ -28,7 +28,7 @@ import java.util.*
 class TokenController(
         @Value("\${edustor.accounts.jwk-key}") val jwkKeyBase64: String,
         val googleProvider: GoogleProvider,
-        val accountRepository: AccountRepository) {
+        val refreshTokenRepository: RefreshTokenRepository) {
     val logger = LoggerFactory.getLogger(TokenController::class.java)
     val TOKEN_EXPIRE_IN = 10 * 60 // Seconds
     val signkey: PrivateKey
@@ -63,9 +63,8 @@ class TokenController(
         )
 
         if ("offline" in scopeList && grantType != "refresh_token") {
-            val rt = RefreshToken(requestedScope)
-            account.refreshTokens.add(rt)
-            accountRepository.save(account)
+            val rt = RefreshToken(account, requestedScope)
+            refreshTokenRepository.save(rt)
             resp["refresh_token"] = rt.token
         }
 
@@ -90,11 +89,10 @@ class TokenController(
 
     fun processRefreshTokenGrant(payload: Map<String, String>): Pair<Account, String> {
         val tokenStr = payload["refresh_token"] ?: throw MissingArgumentException("refresh_token")
-        val account = accountRepository.findByRefreshTokensTokenIn(tokenStr) ?: throw InvalidGrantException("Invalid or expired refresh token")
-        val token = account.refreshTokens.first { it.token == tokenStr }
+        val token = refreshTokenRepository.findByToken(tokenStr) ?: throw InvalidGrantException("Invalid or expired refresh token")
         token.lastUsed = Instant.now()
-        accountRepository.save(account)
-        return account to token.scope
+        refreshTokenRepository.save(token)
+        return token.account to token.scope
     }
 
     fun makeToken(account: Account, scope: String): String {
