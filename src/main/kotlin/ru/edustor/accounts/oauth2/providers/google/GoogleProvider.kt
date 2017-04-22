@@ -57,7 +57,7 @@ open class GoogleProvider(val accountRepository: AccountRepository,
 
         val account = accountRepository.findByGoogleSub(googleAccount.sub) ?: let {
             if (!registrationEnabled) {
-                throw RegistrationDisabledException("New accounts registration is temporary disabled")
+                throw RegistrationDisabledException("New accounts registration is temporarily disabled")
             }
 
             val account = Account()
