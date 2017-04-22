@@ -3,7 +3,7 @@ import org.ajoberstar.grgit.Grgit
 import java.time.Instant
 
 buildscript {
-    ext.kotlin_version = '1.0.6'
+    ext.kotlin_version = '1.1.1'
     ext.spring_boot_version = '1.4.1.RELEASE'
     ext.edustor_commons_version = 'df9337f'
 
@@ -34,7 +34,6 @@ jar {
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
 }
 
 ext {
@@ -61,7 +60,7 @@ processResources.finalizedBy createProperties
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    compile "ru.edustor.commons:version:$edustor_commons_version"
+    compile project(":edustor-commons:version")
 
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
