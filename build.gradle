@@ -16,15 +16,12 @@ buildscript {
     }
 }
 
-plugins {
-    id "com.palantir.configuration-resolver" version "0.2.0"
-}
 
 apply plugin: 'kotlin'
 apply plugin: 'spring-boot'
 
 group 'ru.edustor'
-version '0.8-m4'
+version '0.9-SNAPSHOT'
 
 jar {
     destinationDir = new File(buildDir, "/dist")
