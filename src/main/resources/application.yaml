@@ -9,3 +9,6 @@ spring:
   data:
     mongodb:
       database: edustor-accounts
+edustor:
+  accounts:
+    registration: false

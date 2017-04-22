@@ -2,8 +2,9 @@ package ru.edustor.accounts.oauth2.rest
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -26,18 +27,20 @@ import java.util.*
 @RestController
 @RequestMapping(value = "/oauth2/token", method = arrayOf(RequestMethod.POST))
 class TokenController(
-        @Value("\${edustor.accounts.jwk-key}") val jwkKeyBase64: String,
         val googleProvider: GoogleProvider,
-        val accountRepository: AccountRepository) {
-    val logger = LoggerFactory.getLogger(TokenController::class.java)
+        val accountRepository: AccountRepository,
+        environment: Environment) {
+
+    val jwkKeyBase64: String = environment.getRequiredProperty("edustor.accounts.jwk-key")
+    val logger: Logger = LoggerFactory.getLogger(TokenController::class.java)
     val TOKEN_EXPIRE_IN = 10 * 60 // Seconds
-    val signkey: PrivateKey
+    val signKey: PrivateKey
     val systemScopes = arrayOf("internal")
 
     init {
         val keyBytes = Base64.getDecoder().decode(jwkKeyBase64)
         val spec = PKCS8EncodedKeySpec(keyBytes)
-        signkey = KeyFactory.getInstance("RSA").generatePrivate(spec)
+        signKey = KeyFactory.getInstance("RSA").generatePrivate(spec)
     }
 
     @RequestMapping
@@ -104,7 +107,7 @@ class TokenController(
                     .claim("scope", scope)
                     .setExpiration(Date(System.currentTimeMillis() + TOKEN_EXPIRE_IN * 1000))
                     .setIssuedAt(Date())
-                    .signWith(SignatureAlgorithm.RS256, signkey)
+                    .signWith(SignatureAlgorithm.RS256, signKey)
                     .compact()
             return token
         } catch (e: Exception) {
