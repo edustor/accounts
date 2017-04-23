@@ -31,6 +31,7 @@ class TokenController(
         val accountRepository: AccountRepository,
         environment: Environment) {
 
+//    Use "openssl pkcs8 -topk8 -inform PEM -outform DER -in CA_key.pem -out CA_key.der -nocrypt" to convert PEM key
     val jwkKeyBase64: String = environment.getRequiredProperty("edustor.accounts.jwk-key")
     val logger: Logger = LoggerFactory.getLogger(TokenController::class.java)
     val TOKEN_EXPIRE_IN = 10 * 60 // Seconds
