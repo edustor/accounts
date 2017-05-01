@@ -2,6 +2,10 @@ package ru.edustor.accounts.oauth2.rest
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import org.bouncycastle.jce.provider.BouncyCastleProvider
+import org.bouncycastle.openssl.PEMKeyPair
+import org.bouncycastle.openssl.PEMParser
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.env.Environment
@@ -18,9 +22,8 @@ import ru.edustor.accounts.model.Account
 import ru.edustor.accounts.model.RefreshToken
 import ru.edustor.accounts.oauth2.providers.google.GoogleProvider
 import ru.edustor.accounts.repository.AccountRepository
-import java.security.KeyFactory
 import java.security.PrivateKey
-import java.security.spec.PKCS8EncodedKeySpec
+import java.security.Security
 import java.time.Instant
 import java.util.*
 
@@ -31,17 +34,23 @@ class TokenController(
         val accountRepository: AccountRepository,
         environment: Environment) {
 
-//    Use "openssl pkcs8 -topk8 -inform PEM -outform DER -in CA_key.pem -out CA_key.der -nocrypt" to convert PEM key
-    val jwkKeyBase64: String = environment.getRequiredProperty("edustor.accounts.jwk-key")
     val logger: Logger = LoggerFactory.getLogger(TokenController::class.java)
     val TOKEN_EXPIRE_IN = 10 * 60 // Seconds
     val signKey: PrivateKey
     val systemScopes = arrayOf("internal")
 
     init {
-        val keyBytes = Base64.getDecoder().decode(jwkKeyBase64)
-        val spec = PKCS8EncodedKeySpec(keyBytes)
-        signKey = KeyFactory.getInstance("RSA").generatePrivate(spec)
+        val pemKeyBase64 = environment.getRequiredProperty("edustor.accounts.jwk-key")
+        val pemKey = Base64.getDecoder().decode(pemKeyBase64)
+
+        val pemObject = PEMParser(pemKey.inputStream().reader()).readObject() as? PEMKeyPair
+                ?: throw IllegalStateException("edustor.accounts.jwk-key must be base64-encoded private PEM file")
+
+        val converter = JcaPEMKeyConverter().setProvider("BC")
+        Security.addProvider(BouncyCastleProvider())
+        val keyPair = converter.getKeyPair(pemObject)
+
+        signKey = keyPair.private
     }
 
     @RequestMapping
