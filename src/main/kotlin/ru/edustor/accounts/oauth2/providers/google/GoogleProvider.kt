@@ -25,7 +25,7 @@ open class GoogleProvider(val accountRepository: AccountRepository,
 
     private val webVerifier = GoogleIdTokenVerifier.Builder(NetHttpTransport(), JacksonFactory())
             .setAudience(listOf(AUDIENCE))
-            .setIssuer("https://accounts.google.com")
+            .setIssuer("accounts.google.com")
             .build()
 
     fun processIdToken(token: String): GoogleAccount {
