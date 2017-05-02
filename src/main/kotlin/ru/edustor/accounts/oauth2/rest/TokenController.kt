@@ -35,7 +35,6 @@ class TokenController(
         environment: Environment) {
 
     val logger: Logger = LoggerFactory.getLogger(TokenController::class.java)
-    val TOKEN_EXPIRE_IN = 10 * 60 // Seconds
     val signKey: PrivateKey
     val systemScopes = arrayOf("internal")
 
@@ -67,11 +66,16 @@ class TokenController(
                 .filter { it !in systemScopes }
         val scope = scopeList.joinToString(" ")
 
-        val token = makeToken(account, scope)
+        val expiresInTime = when {
+            "interactive" in scope -> 30 * 60
+            else -> 10 * 60
+        }
+
+        val token = makeToken(account, scope, expiresInTime)
 
         val resp = mutableMapOf(
                 "token" to token,
-                "expires_in" to TOKEN_EXPIRE_IN,
+                "expires_in" to expiresInTime,
                 "scope" to scope
         )
 
@@ -110,12 +114,12 @@ class TokenController(
         return account to token.scope
     }
 
-    fun makeToken(account: Account, scope: String): String {
+    fun makeToken(account: Account, scope: String, expiresInTime: Int): String {
         try {
             val token = Jwts.builder()
                     .setSubject(account.id)
                     .claim("scope", scope)
-                    .setExpiration(Date(System.currentTimeMillis() + TOKEN_EXPIRE_IN * 1000))
+                    .setExpiration(Date(System.currentTimeMillis() + expiresInTime * 1000))
                     .setIssuedAt(Date())
                     .signWith(SignatureAlgorithm.RS256, signKey)
                     .compact()
