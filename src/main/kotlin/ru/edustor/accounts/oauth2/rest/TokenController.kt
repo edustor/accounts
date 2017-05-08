@@ -80,7 +80,7 @@ class TokenController(
         )
 
         if ("offline" in scopeList && grantType != "refresh_token") {
-            val rt = RefreshToken(account, requestedScope)
+            val rt = RefreshToken(account = account, scope = requestedScope)
             refreshTokenRepository.save(rt)
             resp["refresh_token"] = rt.token
         }

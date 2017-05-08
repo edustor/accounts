@@ -7,21 +7,14 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "refresh_tokens")
-class RefreshToken() {
-    @Suppress("JoinDeclarationAndAssignment")
-    @Nullable
-    @Basic(optional = false)
-    @Id lateinit var token: String
+data class RefreshToken(
+        @ManyToOne(optional = false)
+        val account: Account,
 
-    @ManyToOne
-    lateinit var account: Account
+        @Suppress("JoinDeclarationAndAssignment")
+        @Basic(optional = false)
+        @Id val token: String = genRandomToken(),
 
-    lateinit var scope: String
-    var lastUsed: Instant = Instant.now()
-
-    constructor(account: Account, scope: String) : this() {
-        this.account = account
-        token = genRandomToken()
-        this.scope = scope
-    }
-}
+        val scope: String,
+        var lastUsed: Instant = Instant.now()
+)

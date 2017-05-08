@@ -5,14 +5,13 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "accounts")
-class Account {
-    @Id var id: String = UUID.randomUUID().toString()
+data class Account(
+        var email: String? = null,
+        var googleSub: String? = null,
 
-    var email: String? = null
-    var googleSub: String? = null
+        @OneToMany(targetEntity = RefreshToken::class, mappedBy = "account",
+                cascade = arrayOf(CascadeType.ALL), orphanRemoval = true, fetch = FetchType.LAZY)
+        val refreshTokens: MutableList<RefreshToken> = mutableListOf(),
 
-    @OneToMany(targetEntity = RefreshToken::class, mappedBy = "account",
-            cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
-    @Basic(fetch = FetchType.LAZY)
-    val refreshTokens: MutableList<RefreshToken> = mutableListOf()
-}
+        @Id var id: String = UUID.randomUUID().toString()
+)
