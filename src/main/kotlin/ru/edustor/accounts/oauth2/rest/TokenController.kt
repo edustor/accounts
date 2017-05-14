@@ -39,11 +39,11 @@ class TokenController(
     val systemScopes = arrayOf("internal")
 
     init {
-        val pemKeyBase64 = environment.getRequiredProperty("edustor.accounts.jwk-key")
+        val pemKeyBase64 = environment.getRequiredProperty("edustor.accounts.jwk-private-key")
         val pemKey = Base64.getDecoder().decode(pemKeyBase64)
 
         val pemObject = PEMParser(pemKey.inputStream().reader()).readObject() as? PEMKeyPair
-                ?: throw IllegalStateException("edustor.accounts.jwk-key must be base64-encoded private PEM file")
+                ?: throw IllegalStateException("edustor.accounts.jwk-private-key must be base64-encoded private PEM file")
 
         val converter = JcaPEMKeyConverter().setProvider("BC")
         Security.addProvider(BouncyCastleProvider())
